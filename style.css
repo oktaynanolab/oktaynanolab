@@ -1,31 +1,38 @@
 body {
   font-family: Arial;
   margin: 0;
-  background: #f5f5f5;
+  background: #fff5e6; /* light beige/orange */
+  color: #5a6b4d; /* soft green text */
 }
 
 header {
-  background: #1a1a1a;
-  color: green;
+  background: #ffb366; /* light orange */
+  color: #fff5e6;
   padding: 20px;
   text-align: center;
 }
 
 nav {
-  background: #200;
+  background: #ffd9b3; /* pale orange */
   padding: 10px;
   text-align: center;
 }
 
 nav a {
-  color: white;
+  color: #5a6b4d; /* green instead of white */
   margin: 10px;
   text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #7a9d54;
 }
 
 section {
   padding: 20px;
-  background: white;
+  background: #fffaf0; /* soft cream */
   margin: 20px;
+  border-left: 5px solid #ffb366;
+  border-radius: 6px;
 }
-
