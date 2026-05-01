@@ -1,38 +1,35 @@
 body {
   font-family: Arial;
   margin: 0;
-  background: #fff5e6; /* light beige/orange */
-  color: #5a6b4d; /* soft green text */
+  background: #fff5e6; /* light orange/cream */
+  color: black; /* text can be black */
 }
 
 header {
   background: #ffb366; /* light orange */
-  color: #fff5e6;
+  color: black; /* black text is OK */
   padding: 20px;
   text-align: center;
 }
 
 nav {
-  background: #ffd9b3; /* pale orange */
+  background: #ffd9b3; /* lighter orange */
   padding: 10px;
   text-align: center;
 }
 
 nav a {
-  color: #5a6b4d; /* green instead of white */
+  color: black;
   margin: 10px;
   text-decoration: none;
   font-weight: bold;
 }
 
-nav a:hover {
-  color: #7a9d54;
-}
-
 section {
   padding: 20px;
-  background: #fffaf0; /* soft cream */
+  background: #fffaf0; /* very light orange */
   margin: 20px;
   border-left: 5px solid #ffb366;
   border-radius: 6px;
+}  border-radius: 6px;
 }
