@@ -1,45 +1,163 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Oktay Nanotechnology Group</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nanotech Lab</title>
+
+<style>
+/* ================= BACKGROUND ================= */
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: Arial, sans-serif;
+  color: #e5e7eb;
+  background: radial-gradient(circle at top right, #0b1220, #020617);
+}
+
+/* ================= DNA CANVAS ================= */
+#dnaCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+}
+
+/* ================= CONTENT ================= */
+header {
+  text-align: center;
+  padding: 60px 20px 20px;
+}
+
+header h1 {
+  color: #38bdf8;
+}
+
+section {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.35);
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+}
+</style>
 </head>
+
 <body>
-
-<header>
-  <h1>Oktay Nanotechnology Group</h1>
-  <p>DNA Nanotechnology & Materials Science Research Lab</p>
-</header>
-
-<nav>
-  <a href="index.html">Home</a>
-  <a href="team.html">People</a>
-  <a href="publications.html">Publications</a>
-  <a href="outreach.html">Outreach</a>
-  <a href="funding.html">Funding</a>
-  <a href="openings.html">Openings</a>
-  <a href="values&philosophy.html">Values</a>
-  <a href="contact.html">Contact</a>
-</nav>
 
 <canvas id="dnaCanvas"></canvas>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<script src="dna.js"></script>
-
 <header>
   <h1>Oktay Nanotechnology Group</h1>
-  <p>DNA Nanotechnology • Biomaterials • Synthetic Systems</p>
+  <p>DNA Nanotechnology • Biomaterials • Self-Assembly Systems</p>
 </header>
 
 <section>
   <h2>Welcome</h2>
-  <p>
-    We design DNA nanostructures, hydrogels, and programmable biomaterials for
-    next-generation biomedical applications.
-  </p>
+  <p>We design DNA nanostructures and programmable biomaterials.</p>
 </section>
+
+<!-- Three.js -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+<script>
+/* ================= SCENE ================= */
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+  60,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+
+/* DNA moved to corner */
+camera.position.set(25, 10, 40);
+
+const renderer = new THREE.WebGLRenderer({
+  canvas: document.getElementById("dnaCanvas"),
+  alpha: true,
+  antialias: true
+});
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+/* ================= DNA HELIX ================= */
+const radius = 5;
+const heightStep = 0.4;
+
+const matA = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+const matB = new THREE.MeshBasicMaterial({ color: 0x6366f1 });
+const bondMat = new THREE.LineBasicMaterial({ color: 0x94a3b8 });
+
+for (let i = 0; i < 120; i++) {
+  const angle = i * 0.25;
+  const y = i * heightStep;
+
+  const x1 = radius * Math.cos(angle);
+  const z1 = radius * Math.sin(angle);
+
+  const x2 = radius * Math.cos(angle + Math.PI);
+  const z2 = radius * Math.sin(angle + Math.PI);
+
+  const s1 = new THREE.Mesh(new THREE.SphereGeometry(0.2, 8, 8), matA);
+  s1.position.set(x1, y - 20, z1);
+  scene.add(s1);
+
+  const s2 = new THREE.Mesh(new THREE.SphereGeometry(0.2, 8, 8), matB);
+  s2.position.set(x2, y - 20, z2);
+  scene.add(s2);
+
+  const geo = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(x1, y - 20, z1),
+    new THREE.Vector3(x2, y - 20, z2)
+  ]);
+
+  scene.add(new THREE.Line(geo, bondMat));
+}
+
+/* ================= POLYHEDRAL SHAPE ================= */
+const poly = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(4, 0),
+  new THREE.MeshBasicMaterial({
+    color: 0x38bdf8,
+    wireframe: true,
+    opacity: 0.25,
+    transparent: true
+  })
+);
+
+poly.position.set(-20, 10, -30);
+scene.add(poly);
+
+/* ================= POSITION FIX ================= */
+scene.rotation.y = 0.6;
+scene.rotation.x = 0.2;
+
+/* ================= ANIMATION ================= */
+function animate() {
+  requestAnimationFrame(animate);
+
+  scene.rotation.y += 0.0015;
+  poly.rotation.x += 0.002;
+  poly.rotation.y += 0.003;
+
+  renderer.render(scene, camera);
+}
+
+animate();
+
+/* ================= RESIZE ================= */
+window.addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
 
 </body>
 </html>
-
