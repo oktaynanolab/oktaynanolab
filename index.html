@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nanotechnology Group</title>
+<title>Nanotech Lab</title>
 
 <style>
-/* ================= GLOBAL ================= */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -15,16 +14,14 @@ body {
   overflow-x: hidden;
 }
 
-/* ================= NAV ================= */
+/* NAV */
 nav {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 18px;
-  padding: 14px;
+  gap: 15px;
+  padding: 12px;
   background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid #334155;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -40,89 +37,61 @@ nav a:hover {
   color: #38bdf8;
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 header {
   text-align: center;
-  padding: 70px 20px 20px;
+  padding: 60px 20px 10px;
 }
 
 header h1 {
   color: #38bdf8;
-  font-size: 2.3rem;
 }
 
-header p {
-  color: #94a3b8;
-}
-
-/* ================= SECTION ================= */
+/* SECTION */
 section {
   max-width: 900px;
   margin: 50px auto;
   padding: 20px;
   background: rgba(15, 23, 42, 0.35);
   border-radius: 12px;
-  backdrop-filter: blur(6px);
 }
 
-section h2 {
-  color: #38bdf8;
-  margin-bottom: 10px;
-}
-
-/* ================= DNA (SMALL CORNER) ================= */
+/* IMPORTANT: FULL CANVAS (DO NOT CUT) */
 #dnaCanvas {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 220px;
-  height: 220px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: -1;
-  opacity: 0.9;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= DNA BACKGROUND ================= -->
 <canvas id="dnaCanvas"></canvas>
 
-<!-- ================= NAVIGATION ================= -->
 <nav>
   <a href="#">Home</a>
   <a href="#">Team</a>
   <a href="#">Publications</a>
   <a href="#">Outreach</a>
-  <a href="#">Values & Philosophy</a>
+  <a href="#">Philosophy</a>
   <a href="#">Openings</a>
   <a href="#">Funding</a>
   <a href="#">Contact</a>
 </nav>
 
-<!-- ================= HEADER ================= -->
 <header>
   <h1>Oktay Nanotechnology Group</h1>
-  <p>DNA Nanotechnology • Biomaterials • Programmable Matter</p>
 </header>
 
-<!-- ================= CONTENT ================= -->
 <section>
   <h2>Welcome</h2>
-  <p>
-    We engineer DNA nanostructures, hydrogels, and programmable biomaterials
-    for next-generation biomedical systems.
-  </p>
+  <p>DNA nanotechnology and programmable biomaterials research.</p>
 </section>
 
-<section>
-  <h2>Research Focus</h2>
-  <p>
-    DNA nanostars • GelMA composites • 3D bioprinting • molecular self-assembly
-  </p>
-</section>
-
-<!-- ================= THREE.JS ================= -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
 <script>
@@ -130,14 +99,14 @@ section h2 {
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
-  60,
-  1,
+  55,
+  window.innerWidth / window.innerHeight,
   0.1,
   1000
 );
 
-/* Small DNA in corner */
-camera.position.set(15, 8, 25);
+/* FIX: proper corner placement WITHOUT clipping */
+camera.position.set(12, 6, 22);  // smaller + closer
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.getElementById("dnaCanvas"),
@@ -145,17 +114,22 @@ const renderer = new THREE.WebGLRenderer({
   antialias: true
 });
 
-renderer.setSize(220, 220);
+renderer.setSize(window.innerWidth, window.innerHeight);
 
-/* ================= DNA ================= */
-const radius = 3;
-const step = 0.35;
+/* ================= DNA (SMALL + SHIFTED) ================= */
+const radius = 2.2;     // smaller radius = smaller DNA
+const step = 0.25;
 
 const matA = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
 const matB = new THREE.MeshBasicMaterial({ color: 0x6366f1 });
 const bond = new THREE.LineBasicMaterial({ color: 0x94a3b8 });
 
-for (let i = 0; i < 80; i++) {
+const group = new THREE.Group();
+
+/* SHIFT WHOLE DNA TO CORNER (KEY FIX) */
+group.position.set(8, 4, -5);
+
+for (let i = 0; i < 90; i++) {
   const angle = i * 0.25;
   const y = i * step;
 
@@ -165,34 +139,45 @@ for (let i = 0; i < 80; i++) {
   const x2 = radius * Math.cos(angle + Math.PI);
   const z2 = radius * Math.sin(angle + Math.PI);
 
-  const s1 = new THREE.Mesh(new THREE.SphereGeometry(0.15, 8, 8), matA);
-  s1.position.set(x1, y - 10, z1);
-  scene.add(s1);
+  const s1 = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), matA);
+  s1.position.set(x1, y - 8, z1);
+  group.add(s1);
 
-  const s2 = new THREE.Mesh(new THREE.SphereGeometry(0.15, 8, 8), matB);
-  s2.position.set(x2, y - 10, z2);
-  scene.add(s2);
+  const s2 = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), matB);
+  s2.position.set(x2, y - 8, z2);
+  group.add(s2);
 
   const geo = new THREE.BufferGeometry().setFromPoints([
-    new THREE.Vector3(x1, y - 10, z1),
-    new THREE.Vector3(x2, y - 10, z2)
+    new THREE.Vector3(x1, y - 8, z1),
+    new THREE.Vector3(x2, y - 8, z2)
   ]);
 
-  scene.add(new THREE.Line(geo, bond));
+  group.add(new THREE.Line(geo, bond));
 }
 
-/* ================= FIX POSITION ================= */
-scene.rotation.y = 0.8;
-scene.rotation.x = 0.2;
+scene.add(group);
+
+/* ================= FIXED VIEW ================= */
+scene.rotation.x = 0.3;
+scene.rotation.y = 0.7;
 
 /* ================= ANIMATE ================= */
 function animate() {
   requestAnimationFrame(animate);
-  scene.rotation.y += 0.002;
+
+  group.rotation.y += 0.003;
+
   renderer.render(scene, camera);
 }
 
 animate();
+
+/* ================= RESIZE ================= */
+window.addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
 </script>
 
 </body>
