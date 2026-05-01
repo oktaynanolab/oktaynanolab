@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nanotech Lab</title>
+<title>Nanotechnology Group</title>
 
 <style>
+/* ================= GLOBAL ================= */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -14,11 +15,12 @@ body {
   overflow-x: hidden;
 }
 
-/* NAV */
+/* ================= NAV ================= */
 nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 15px;
+  gap: 14px;
   padding: 12px;
   background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(10px);
@@ -37,148 +39,100 @@ nav a:hover {
   color: #38bdf8;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 header {
   text-align: center;
-  padding: 60px 20px 10px;
+  padding: 70px 20px 20px;
 }
 
 header h1 {
   color: #38bdf8;
+  font-size: 2.3rem;
 }
 
-/* SECTION */
+header p {
+  color: #94a3b8;
+}
+
+/* ================= SECTIONS ================= */
 section {
   max-width: 900px;
   margin: 50px auto;
   padding: 20px;
   background: rgba(15, 23, 42, 0.35);
   border-radius: 12px;
+  backdrop-filter: blur(6px);
 }
 
-/* IMPORTANT: FULL CANVAS (DO NOT CUT) */
-#dnaCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
+section h2 {
+  color: #38bdf8;
+  margin-bottom: 10px;
+}
+
+/* ================= GRID ================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: rgba(30, 41, 59, 0.6);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #334155;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="dnaCanvas"></canvas>
-
+<!-- ================= NAVIGATION ================= -->
 <nav>
   <a href="#">Home</a>
   <a href="#">Team</a>
   <a href="#">Publications</a>
   <a href="#">Outreach</a>
-  <a href="#">Philosophy</a>
+  <a href="#">Values & Philosophy</a>
   <a href="#">Openings</a>
   <a href="#">Funding</a>
   <a href="#">Contact</a>
 </nav>
 
+<!-- ================= HEADER ================= -->
 <header>
   <h1>Oktay Nanotechnology Group</h1>
+  <p>DNA Nanotechnology • Biomaterials • Synthetic Systems</p>
 </header>
 
+<!-- ================= HOME ================= -->
 <section>
   <h2>Welcome</h2>
-  <p>DNA nanotechnology and programmable biomaterials research.</p>
+  <p>
+    We are a research group focused on DNA nanotechnology, hydrogels,
+    and programmable biomaterials for advanced biomedical applications.
+  </p>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<!-- ================= RESEARCH ================= -->
+<section>
+  <h2>Research Areas</h2>
+  <div class="grid">
+    <div class="card">DNA Nanostructures</div>
+    <div class="card">GelMA Hydrogels</div>
+    <div class="card">3D Bioprinting</div>
+    <div class="card">Molecular Self-Assembly</div>
+  </div>
+</section>
 
-<script>
-/* ================= SCENE ================= */
-const scene = new THREE.Scene();
-
-const camera = new THREE.PerspectiveCamera(
-  55,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
-
-/* FIX: proper corner placement WITHOUT clipping */
-camera.position.set(12, 6, 22);  // smaller + closer
-
-const renderer = new THREE.WebGLRenderer({
-  canvas: document.getElementById("dnaCanvas"),
-  alpha: true,
-  antialias: true
-});
-
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-/* ================= DNA (SMALL + SHIFTED) ================= */
-const radius = 2.2;     // smaller radius = smaller DNA
-const step = 0.25;
-
-const matA = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
-const matB = new THREE.MeshBasicMaterial({ color: 0x6366f1 });
-const bond = new THREE.LineBasicMaterial({ color: 0x94a3b8 });
-
-const group = new THREE.Group();
-
-/* SHIFT WHOLE DNA TO CORNER (KEY FIX) */
-group.position.set(8, 4, -5);
-
-for (let i = 0; i < 90; i++) {
-  const angle = i * 0.25;
-  const y = i * step;
-
-  const x1 = radius * Math.cos(angle);
-  const z1 = radius * Math.sin(angle);
-
-  const x2 = radius * Math.cos(angle + Math.PI);
-  const z2 = radius * Math.sin(angle + Math.PI);
-
-  const s1 = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), matA);
-  s1.position.set(x1, y - 8, z1);
-  group.add(s1);
-
-  const s2 = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), matB);
-  s2.position.set(x2, y - 8, z2);
-  group.add(s2);
-
-  const geo = new THREE.BufferGeometry().setFromPoints([
-    new THREE.Vector3(x1, y - 8, z1),
-    new THREE.Vector3(x2, y - 8, z2)
-  ]);
-
-  group.add(new THREE.Line(geo, bond));
-}
-
-scene.add(group);
-
-/* ================= FIXED VIEW ================= */
-scene.rotation.x = 0.3;
-scene.rotation.y = 0.7;
-
-/* ================= ANIMATE ================= */
-function animate() {
-  requestAnimationFrame(animate);
-
-  group.rotation.y += 0.003;
-
-  renderer.render(scene, camera);
-}
-
-animate();
-
-/* ================= RESIZE ================= */
-window.addEventListener("resize", () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
-</script>
+<!-- ================= FOOTER ================= -->
+<section>
+  <h2>Lab Vision</h2>
+  <p>
+    Engineering programmable matter at the molecular scale for next-generation
+    biomedical and materials applications.
+  </p>
+</section>
 
 </body>
 </html>
