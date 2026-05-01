@@ -1,9 +1,80 @@
+/* ===== GLOBAL ===== */
 body {
   margin: 0;
-  overflow: hidden;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
   background: radial-gradient(circle at center, #0f172a, #020617);
+  color: #e2e8f0;
+  overflow-x: hidden;
 }
 
+/* ===== NAVBAR ===== */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  padding: 15px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #334155;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+nav a {
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+nav a:hover {
+  color: #38bdf8;
+}
+
+/* ===== HEADER ===== */
+header {
+  text-align: center;
+  padding: 60px 20px 20px;
+}
+
+header h1 {
+  font-size: 2.6rem;
+  color: #38bdf8;
+}
+
+header p {
+  color: #94a3b8;
+}
+
+/* ===== SECTIONS ===== */
+section {
+  max-width: 1000px;
+  margin: 70px auto;
+  padding: 0 20px;
+}
+
+h2 {
+  color: #38bdf8;
+  margin-bottom: 15px;
+}
+
+/* ===== GRID (People/Publications) ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: rgba(30, 41, 59, 0.6);
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+}
+
+/* ===== DNA BACKGROUND ===== */
 #dnaCanvas {
   position: fixed;
   top: 0;
